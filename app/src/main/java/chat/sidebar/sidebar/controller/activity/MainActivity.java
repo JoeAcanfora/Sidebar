@@ -1,7 +1,9 @@
-package chat.sidebar.sidebar;
+package chat.sidebar.sidebar.controller.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import chat.sidebar.sidebar.R;
 
 public class MainActivity extends AppCompatActivity {
 

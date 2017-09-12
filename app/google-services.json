@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "120080596730",
+    "firebase_url": "https://sidebar-fc810.firebaseio.com",
+    "project_id": "sidebar-fc810",
+    "storage_bucket": "sidebar-fc810.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120080596730:android:b362754aec1a30e7",
+        "android_client_info": {
+          "package_name": "chat.sidebar.sidebar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120080596730-3p40s07bnstm1rc9sa17vn19mfulr965.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chat.sidebar.sidebar",
+            "certificate_hash": "92f839073bf0ccfb312b9124b44287964aebdf35"
+          }
+        },
+        {
+          "client_id": "120080596730-iojbrtp4p4i85276v8c6leutffpo525q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJwRJ_axcJUi0KcJACbBWCWyDAUodJth0"
+        },
+        {
+          "current_key": "AIzaSyAhj4CtOiPkqXrRGvTSW5d_CRYKTDe5AC4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120080596730-iojbrtp4p4i85276v8c6leutffpo525q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
