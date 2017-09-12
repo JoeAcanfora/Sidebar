@@ -22,7 +22,7 @@ android {
 }
 
 //android support must all be the same version number
-ext.supportLibVersion = "26.+"
+ext.supportLibVersion = "26.0.1"
 
 dependencies {
 
@@ -50,6 +50,10 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$fireBaseVersion"
     compile "com.google.firebase:firebase-auth:$fireBaseVersion"
     implementation "com.google.firebase:firebase-database:$fireBaseVersion"
+
+    // Single target that includes all FirebaseUI libraries above
+    compile 'com.firebaseui:firebase-ui:2.3.0'
+
 
     ext.butterknifeVersion = "8.8.1"
     compile "com.jakewharton:butterknife:$butterknifeVersion"
