@@ -1,4 +1,4 @@
-package chat.sidebar.sidebar;
+package acanfora.sidebar.chat;
 
 import org.junit.Test;
 

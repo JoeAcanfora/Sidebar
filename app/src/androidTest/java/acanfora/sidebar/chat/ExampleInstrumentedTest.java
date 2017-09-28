@@ -1,4 +1,4 @@
-package chat.sidebar.sidebar;
+package acanfora.sidebar.chat;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

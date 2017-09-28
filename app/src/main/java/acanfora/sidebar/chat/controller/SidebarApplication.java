@@ -1,4 +1,4 @@
-package chat.sidebar.sidebar.controller;
+package acanfora.sidebar.chat.controller;
 
 import android.app.Application;
 
