@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 
-
+//android support must all be the same version number
+ext.supportLibVersion = "26.0.1"
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "$supportLibVersion"
     defaultConfig {
         applicationId "chat.sidebar.sidebar"
         minSdkVersion 22
@@ -12,6 +13,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true //important
     }
     buildTypes {
         release {
@@ -19,27 +22,38 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        // use SCM debug.keystore so debug builds are consistent across all developers
+        debug {
+            storeFile file("debug.keystore")
+            storePassword 'Md7xr9Iq9lsq'
+            keyAlias 'debug.keystore'
+            keyPassword 'Md7xr9Iq9lsq'
+        }
+
+        release {
+            storeFile file('sidebar-app.jks')
+            storePassword 'Md7xr9Iq9lsq'
+            keyAlias 'sidebar-app'
+            keyPassword 'Md7xr9Iq9lsq'
+        }
+
+    }
 }
 
-//android support must all be the same version number
-ext.supportLibVersion = "26.0.1"
+
 
 dependencies {
 
 
-    implementation 'com.google.firebase:firebase-database:11.0.4'
-    implementation 'com.google.firebase:firebase-messaging:11.0.4'
-    implementation 'com.google.firebase:firebase-config:11.0.4'
-    implementation 'com.google.firebase:firebase-crash:11.0.4'
-    implementation 'com.google.firebase:firebase-appindexing:11.0.4'
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     testCompile 'junit:junit:4.12'
-
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     compile "com.android.support:appcompat-v7:$supportLibVersion"
     //recyclerview
@@ -51,13 +65,20 @@ dependencies {
 
 
 
-    ext.fireBaseVersion = "11.0.4"
-    implementation "com.google.firebase:firebase-core:$fireBaseVersion"
-    compile "com.google.firebase:firebase-auth:$fireBaseVersion"
-    implementation "com.google.firebase:firebase-database:$fireBaseVersion"
+    ext.firebaseVersion = "11.4.2"
+    ext.firebaseUI = "3.0.0"
+    compile "com.google.firebase:firebase-core:$firebaseVersion"
+    compile "com.google.firebase:firebase-auth:$firebaseVersion"
+//    compile "com.firebaseui:firebase-ui-auth:$firebaseUI"
+//    compile "com.google.android.gms:play-services-auth$firebaseVersion"
+    compile "com.google.firebase:firebase-database:$firebaseVersion"
+    compile "com.google.firebase:firebase-messaging:$firebaseVersion"
+    compile "com.google.firebase:firebase-config:$firebaseVersion"
+    compile "com.google.firebase:firebase-crash:$firebaseVersion"
+    compile "com.google.firebase:firebase-appindexing:$firebaseVersion"
 
     // Single target that includes all FirebaseUI libraries above
-    compile 'com.firebaseui:firebase-ui:2.3.0'
+    compile "com.firebaseui:firebase-ui:$firebaseUI"
 
 
     ext.butterknifeVersion = "8.8.1"
@@ -82,7 +103,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-
 }
 apply plugin: 'com.google.gms.google-services'
 

@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -39,7 +38,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -48,8 +46,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.appindexing.Action;
-import com.google.firebase.appindexing.FirebaseAppIndex;
-import com.google.firebase.appindexing.FirebaseUserActions;
 import com.google.firebase.appindexing.Indexable;
 import com.google.firebase.appindexing.builders.Indexables;
 import com.google.firebase.appindexing.builders.PersonBuilder;
@@ -67,21 +63,27 @@ import java.util.Map;
 import acanfora.sidebar.chat.Constants;
 import acanfora.sidebar.chat.R;
 import acanfora.sidebar.chat.model.SidebarMessage;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainChatActivity extends BaseActivity
         implements GoogleApiClient.OnConnectionFailedListener {
 
     public static class SidebarMessageViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.messageTextView)
         public TextView messageTextView;
+
+        @BindView(R.id.messengerTextView)
         public TextView messengerTextView;
+
+        @BindView(R.id.messengerImageView)
         public ImageView messengerImageView;
 
         public SidebarMessageViewHolder(View v) {
             super(v);
-            messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
-            messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
-            messengerImageView = (ImageView) itemView.findViewById(R.id.messengerImageView);
+            ButterKnife.bind(this, v);
         }
     }
 
@@ -150,62 +152,69 @@ public class MainChatActivity extends BaseActivity
 
         // New child entries
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<SidebarMessage,
-                SidebarMessageViewHolder>(
-                SidebarMessage.class,
-                R.layout.item_message,
-                SidebarMessageViewHolder.class,
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
 
-            @Override
-            protected void populateViewHolder(SidebarMessageViewHolder viewHolder,
-                                              SidebarMessage friendlySidebarMessage, int position) {
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                viewHolder.messageTextView.setText(friendlySidebarMessage.getText());
-                viewHolder.messengerTextView.setText(friendlySidebarMessage.getName());
-                if (friendlySidebarMessage.getPhotoUrl() == null) {
-                    viewHolder.messengerImageView
-                            .setImageDrawable(ContextCompat
-                                    .getDrawable(MainChatActivity.this,
-                                            R.drawable.ic_account_circle_black_36dp));
-                } else {
-                    Glide.with(MainChatActivity.this)
-                            .load(friendlySidebarMessage.getPhotoUrl())
-                            .into(viewHolder.messengerImageView);
-                }
-                // write this message to the on-device index
-                FirebaseAppIndex.getInstance().update(getSidebarMessageIndexable(friendlySidebarMessage));
-                // log a view action on it
-                FirebaseUserActions.getInstance().end(getSidebarMessageViewAction(friendlySidebarMessage));
-            }
-
+        //TODO create a firebase adapter
+//        mFirebaseAdapter = new FirebaseRecyclerAdapter<SidebarMessage,
+//                SidebarMessageViewHolder>(
+//                SidebarMessage.class,
+//                R.layout.item_message,
+//                SidebarMessageViewHolder.class,
+//                mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
+//
 //            @Override
-//            protected SidebarMessage parseSnapshot(DataSnapshot snapshot) {
-//                SidebarMessage friendlySidebarMessage = super.parseSnapshot(snapshot);
-//                if (friendlySidebarMessage != null) {
-//                    friendlySidebarMessage.setId(snapshot.getKey());
+//            protected void onBindViewHolder(SidebarMessageViewHolder viewHolder, int i, SidebarMessage sidebarMessage) {
+//                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+//                viewHolder.messageTextView.setText(sidebarMessage.getText());
+//                viewHolder.messengerTextView.setText(sidebarMessage.getName());
+//                if (sidebarMessage.getPhotoUrl() == null) {
+//                    viewHolder.messengerImageView
+//                            .setImageDrawable(ContextCompat
+//                                    .getDrawable(MainChatActivity.this,
+//                                            R.drawable.ic_account_circle_black_36dp));
+//                } else {
+//                    Glide.with(MainChatActivity.this)
+//                            .load(sidebarMessage.getPhotoUrl())
+//                            .into(viewHolder.messengerImageView);
 //                }
-//                return friendlySidebarMessage;
+//                // write this message to the on-device index
+//                FirebaseAppIndex.getInstance().update(getSidebarMessageIndexable(sidebarMessage));
+//                // log a view action on it
+//                FirebaseUserActions.getInstance().end(getSidebarMessageViewAction(sidebarMessage));
 //            }
-        };
-
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                int friendlySidebarMessageCount = mFirebaseAdapter.getItemCount();
-                int lastVisiblePosition =
-                        mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
-                // If the recycler view is initially being loaded or the
-                // user is at the bottom of the list, scroll to the bottom
-                // of the list to show the newly added message.
-                if (lastVisiblePosition == -1 ||
-                        (positionStart >= (friendlySidebarMessageCount - 1) &&
-                                lastVisiblePosition == (positionStart - 1))) {
-                    mSidebarMessageRecyclerView.scrollToPosition(positionStart);
-                }
-            }
-        });
+//
+//            @Override
+//            public SidebarMessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//                return null;
+//            }
+//
+//            //            @Override
+////            protected SidebarMessage parseSnapshot(DataSnapshot snapshot) {
+////                SidebarMessage friendlySidebarMessage = super.parseSnapshot(snapshot);
+////                if (friendlySidebarMessage != null) {
+////                    friendlySidebarMessage.setId(snapshot.getKey());
+////                }
+////                return friendlySidebarMessage;
+////            }
+//
+//        };
+//
+//        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//            @Override
+//            public void onItemRangeInserted(int positionStart, int itemCount) {
+//                super.onItemRangeInserted(positionStart, itemCount);
+//                int friendlySidebarMessageCount = mFirebaseAdapter.getItemCount();
+//                int lastVisiblePosition =
+//                        mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+//                // If the recycler view is initially being loaded or the
+//                // user is at the bottom of the list, scroll to the bottom
+//                // of the list to show the newly added message.
+//                if (lastVisiblePosition == -1 ||
+//                        (positionStart >= (friendlySidebarMessageCount - 1) &&
+//                                lastVisiblePosition == (positionStart - 1))) {
+//                    mSidebarMessageRecyclerView.scrollToPosition(positionStart);
+//                }
+//            }
+//        });
 
         mSidebarMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
         mSidebarMessageRecyclerView.setAdapter(mFirebaseAdapter);
